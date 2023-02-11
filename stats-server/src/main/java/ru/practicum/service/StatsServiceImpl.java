@@ -11,7 +11,6 @@ import ru.practicum.repository.StatsRepository;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -34,9 +33,9 @@ public class StatsServiceImpl implements StatsService {
     public List<StatsDto> getStats(String start, String end, List<String> uris, Boolean unique) {
         if (unique && uris == null) {
             return repository.findUniqueIpStats(LocalDateTime.parse(start, pattern), LocalDateTime.parse(end, pattern));
-        } else if (unique && uris!= null) {
+        } else if (unique && uris != null) {
             return repository.findUniqueIpAndUriStats(LocalDateTime.parse(start, pattern), LocalDateTime.parse(end, pattern), uris);
-        }else if (!unique && uris == null) {
+        } else if (!unique && uris == null) {
             return repository.findAll(LocalDateTime.parse(start, pattern), LocalDateTime.parse(end, pattern));
         } else {
             return repository.findUriStats(LocalDateTime.parse(start, pattern), LocalDateTime.parse(end, pattern), uris);
