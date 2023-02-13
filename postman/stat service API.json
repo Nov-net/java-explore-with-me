@@ -1,0 +1,1208 @@
+{
+	"info": {
+		"_postman_id": "6ee74ead-9410-412f-9a16-e0dcccbecfda",
+		"name": "Stat service API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "23435817"
+	},
+	"item": [
+		{
+			"name": "hits",
+			"item": [
+				{
+					"name": "add hit 1 (ev=1, ip=1)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([201]);\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"app\": \"ewm-main-service\",\r\n  \"uri\": \"/events/1\",\r\n  \"ip\": \"100.100.0.1\",\r\n  \"timestamp\": \"2022-01-01 01:00:00\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9090/hit",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9090",
+							"path": [
+								"hit"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add failed hit without app",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 500\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([500, 404, 400]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"uri\": \"/events/1\",\r\n  \"ip\": \"192.163.0.1\",\r\n  \"timestamp\": \"2022-09-06 11:00:23\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9090/hit",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9090",
+							"path": [
+								"hit"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add failed hit with blank app",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 500\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([500, 404, 400]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"app\": \" \",\r\n  \"uri\": \"/events/1\",\r\n  \"ip\": \"192.163.0.1\",\r\n  \"timestamp\": \"2022-09-06 11:00:23\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9090/hit",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9090",
+							"path": [
+								"hit"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add failed hit with empty app",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 500\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([500, 404, 400]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"app\": \"\",\r\n  \"uri\": \"/events/1\",\r\n  \"ip\": \"192.163.0.1\",\r\n  \"timestamp\": \"2022-09-06 11:00:23\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9090/hit",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9090",
+							"path": [
+								"hit"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add failed hit without uri",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 500\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([500, 404, 400]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"app\": \"ewm-main-service\",\r\n  \"ip\": \"192.163.0.1\",\r\n  \"timestamp\": \"2022-09-06 11:00:23\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9090/hit",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9090",
+							"path": [
+								"hit"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add failed hit with blank uri",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 500\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([500, 404, 400]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"app\": \"ewm-main-service\",\r\n  \"uri\": \" \",\r\n  \"ip\": \"192.163.0.1\",\r\n  \"timestamp\": \"2022-09-06 11:00:23\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9090/hit",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9090",
+							"path": [
+								"hit"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add failed hit with empty uri",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 500\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([500, 404, 400]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"app\": \"ewm-main-service\",\r\n  \"uri\": \"\",\r\n  \"ip\": \"192.163.0.1\",\r\n  \"timestamp\": \"2022-09-06 11:00:23\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9090/hit",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9090",
+							"path": [
+								"hit"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add failed hit without ip",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 500\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([500, 404, 400]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"app\": \"ewm-main-service\",\r\n  \"uri\": \"/events/1\",\r\n  \"timestamp\": \"2022-09-06 11:00:23\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9090/hit",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9090",
+							"path": [
+								"hit"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add failed hit with blank ip",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 500\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([500, 404, 400]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"app\": \"ewm-main-service\",\r\n  \"uri\": \"/events/1\",\r\n  \"ip\": \" \",\r\n  \"timestamp\": \"2022-09-06 11:00:23\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9090/hit",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9090",
+							"path": [
+								"hit"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add failed hit with empty ip",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 500\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([500, 404, 400]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"app\": \"ewm-main-service\",\r\n  \"uri\": \"/events/1\",\r\n  \"ip\": \"\",\r\n  \"timestamp\": \"2022-09-06 11:00:23\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9090/hit",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9090",
+							"path": [
+								"hit"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add failed hit without timestamp",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 500\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([500, 404, 400]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"app\": \"ewm-main-service\",\r\n  \"uri\": \"/events/1\",\r\n  \"ip\": \"192.163.0.1\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9090/hit",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9090",
+							"path": [
+								"hit"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add failed hit with blank timestamp",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 500\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([500, 404, 400]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"app\": \"ewm-main-service\",\r\n  \"uri\": \"/events/1\",\r\n  \"ip\": \"192.163.0.1\",\r\n  \"timestamp\": \" \"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9090/hit",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9090",
+							"path": [
+								"hit"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add failed hit with empty timestamp",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 500\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([500, 404, 400]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"app\": \"ewm-main-service\",\r\n  \"uri\": \"/events/1\",\r\n  \"ip\": \"192.163.0.1\",\r\n  \"timestamp\": \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9090/hit",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9090",
+							"path": [
+								"hit"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add hit 2 (ev=1, ip=2)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([201]);\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"app\": \"ewm-main-service\",\r\n  \"uri\": \"/events/1\",\r\n  \"ip\": \"100.100.0.2\",\r\n  \"timestamp\": \"2022-01-02 10:00:00\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9090/hit",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9090",
+							"path": [
+								"hit"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add hit 3 (ev=1, ip=1)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([201]);\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"app\": \"ewm-main-service\",\r\n  \"uri\": \"/events/1\",\r\n  \"ip\": \"100.100.0.1\",\r\n  \"timestamp\": \"2022-01-03 12:00:00\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9090/hit",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9090",
+							"path": [
+								"hit"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add hit 4 (ev=3, ip=1)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([201]);\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"app\": \"ewm-main-service\",\r\n  \"uri\": \"/events/3\",\r\n  \"ip\": \"100.100.0.1\",\r\n  \"timestamp\": \"2022-01-01 02:00:00\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9090/hit",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9090",
+							"path": [
+								"hit"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add hit 5 (ev=3, ip=3)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([201]);\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"app\": \"ewm-main-service\",\r\n  \"uri\": \"/events/3\",\r\n  \"ip\": \"100.100.0.3\",\r\n  \"timestamp\": \"2022-01-03 03:00:00\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9090/hit",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9090",
+							"path": [
+								"hit"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "stats",
+			"item": [
+				{
+					"name": "get all stats",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+									"});\r",
+									"pm.test(\"Get all stats\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.length, 'stats count in total').to.eql(2);\r",
+									"    pm.expect(jsonData[0].app, 'result[0]: \"app\" field').to.eql('ewm-main-service');\r",
+									"    pm.expect(jsonData[0].uri, 'result[0]: \"uri\" field').to.eql('/events/1');\r",
+									"    pm.expect(jsonData[0].hits, 'result[0]: \"hits\" field').to.eql(3);\r",
+									"\r",
+									"    pm.expect(jsonData[1].app, 'result[0]: \"app\" field').to.eql('ewm-main-service');\r",
+									"    pm.expect(jsonData[1].uri, 'result[0]: \"uri\" field').to.eql('/events/3');\r",
+									"    pm.expect(jsonData[1].hits, 'result[0]: \"hits\" field').to.eql(2);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:9090/stats?start=2022-01-01 00:00:00&end=2022-01-10 00:00:00",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9090",
+							"path": [
+								"stats"
+							],
+							"query": [
+								{
+									"key": "start",
+									"value": "2022-01-01 00:00:00"
+								},
+								{
+									"key": "end",
+									"value": "2022-01-10 00:00:00"
+								},
+								{
+									"key": "uris",
+									"value": "/events/1",
+									"disabled": true
+								},
+								{
+									"key": "unique",
+									"value": "true",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get failed without end",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 500\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([500, 404, 400]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:9090/stats?start=2022-01-01 00:00:00",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9090",
+							"path": [
+								"stats"
+							],
+							"query": [
+								{
+									"key": "start",
+									"value": "2022-01-01 00:00:00"
+								},
+								{
+									"key": "end",
+									"value": "2022-01-10 00:00:00",
+									"disabled": true
+								},
+								{
+									"key": "uris",
+									"value": "/events/1",
+									"disabled": true
+								},
+								{
+									"key": "unique",
+									"value": "true",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get failed without start",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 500\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([500, 404, 400]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:9090/stats?end=2022-01-10 00:00:00",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9090",
+							"path": [
+								"stats"
+							],
+							"query": [
+								{
+									"key": "start",
+									"value": "2022-01-01 00:00:00",
+									"disabled": true
+								},
+								{
+									"key": "end",
+									"value": "2022-01-10 00:00:00"
+								},
+								{
+									"key": "uris",
+									"value": "/events/1",
+									"disabled": true
+								},
+								{
+									"key": "unique",
+									"value": "true",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get failed without start and end",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 500\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([500, 404, 400]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:9090/stats",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9090",
+							"path": [
+								"stats"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get all stats without hits",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+									"});\r",
+									"pm.test(\"Get all stats\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.length, 'stats count in total').to.eql(0);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:9090/stats?start=2023-01-01 00:00:00&end=2023-01-10 00:00:00",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9090",
+							"path": [
+								"stats"
+							],
+							"query": [
+								{
+									"key": "uris",
+									"value": "/events/1",
+									"disabled": true
+								},
+								{
+									"key": "unique",
+									"value": "true",
+									"disabled": true
+								},
+								{
+									"key": "start",
+									"value": "2023-01-01 00:00:00"
+								},
+								{
+									"key": "end",
+									"value": "2023-01-10 00:00:00"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add hit 6 (ev=2, ip=2)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([201]);\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"app\": \"ewm-main-service\",\r\n  \"uri\": \"/events/2\",\r\n  \"ip\": \"100.100.0.2\",\r\n  \"timestamp\": \"2022-01-02 02:00:00\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9090/hit",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9090",
+							"path": [
+								"hit"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get stats with uris",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+									"});\r",
+									"pm.test(\"Get all stats\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.length, 'stats count in total').to.eql(2);\r",
+									"    pm.expect(jsonData[0].app, 'result[0]: \"app\" field').to.eql('ewm-main-service');\r",
+									"    pm.expect(jsonData[0].uri, 'result[0]: \"uri\" field').to.eql('/events/1');\r",
+									"    pm.expect(jsonData[0].hits, 'result[0]: \"hits\" field').to.eql(3);\r",
+									"\r",
+									"    pm.expect(jsonData[1].app, 'result[0]: \"app\" field').to.eql('ewm-main-service');\r",
+									"    pm.expect(jsonData[1].uri, 'result[0]: \"uri\" field').to.eql('/events/2');\r",
+									"    pm.expect(jsonData[1].hits, 'result[0]: \"hits\" field').to.eql(1);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:9090/stats?start=2022-01-01 00:00:00&end=2022-01-10 00:00:00&uris=/events/1&uris=/events/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9090",
+							"path": [
+								"stats"
+							],
+							"query": [
+								{
+									"key": "start",
+									"value": "2022-01-01 00:00:00"
+								},
+								{
+									"key": "end",
+									"value": "2022-01-10 00:00:00"
+								},
+								{
+									"key": "uris",
+									"value": "/events/1"
+								},
+								{
+									"key": "uris",
+									"value": "/events/2"
+								},
+								{
+									"key": "unique",
+									"value": "true",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get stats with uris unique ip",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+									"});\r",
+									"pm.test(\"Get all stats\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.length, 'stats count in total').to.eql(2);\r",
+									"    pm.expect(jsonData[0].app, 'result[0]: \"app\" field').to.eql('ewm-main-service');\r",
+									"    pm.expect(jsonData[0].uri, 'result[0]: \"uri\" field').to.eql('/events/1');\r",
+									"    pm.expect(jsonData[0].hits, 'result[0]: \"hits\" field').to.eql(2);\r",
+									"\r",
+									"    pm.expect(jsonData[1].app, 'result[0]: \"app\" field').to.eql('ewm-main-service');\r",
+									"    pm.expect(jsonData[1].uri, 'result[0]: \"uri\" field').to.eql('/events/2');\r",
+									"    pm.expect(jsonData[1].hits, 'result[0]: \"hits\" field').to.eql(1);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:9090/stats?start=2022-01-01 00:00:00&end=2022-01-10 00:00:00&uris=/events/1&uris=/events/2&unique=true",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9090",
+							"path": [
+								"stats"
+							],
+							"query": [
+								{
+									"key": "start",
+									"value": "2022-01-01 00:00:00"
+								},
+								{
+									"key": "end",
+									"value": "2022-01-10 00:00:00"
+								},
+								{
+									"key": "uris",
+									"value": "/events/1"
+								},
+								{
+									"key": "uris",
+									"value": "/events/2"
+								},
+								{
+									"key": "unique",
+									"value": "true"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get stats with uris without hits",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+									"});\r",
+									"pm.test(\"Get all stats\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.length, 'stats count in total').to.eql(0);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:9090/stats?start=2022-01-01 00:00:00&end=2022-01-10 00:00:00&uris=/events/0",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9090",
+							"path": [
+								"stats"
+							],
+							"query": [
+								{
+									"key": "start",
+									"value": "2022-01-01 00:00:00"
+								},
+								{
+									"key": "end",
+									"value": "2022-01-10 00:00:00"
+								},
+								{
+									"key": "uris",
+									"value": "/events/0"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
