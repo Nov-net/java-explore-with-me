@@ -10,7 +10,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import ru.practicum.ewm.dto.HitDto;
 import ru.practicum.ewm.dto.StatsDto;
 import ru.practicum.ewm.model.Hit;
-import ru.practicum.ewm.service.repository.StatsRepository;
+import ru.practicum.ewm.repository.StatsRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;

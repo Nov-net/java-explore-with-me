@@ -7,11 +7,14 @@ import ru.practicum.ewm.dto.HitDto;
 import ru.practicum.ewm.dto.HitMapper;
 import ru.practicum.ewm.dto.StatsDto;
 import ru.practicum.ewm.model.Hit;
-import ru.practicum.ewm.service.repository.StatsRepository;
+import ru.practicum.ewm.repository.StatsRepository;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+
+import static ru.practicum.ewm.dto.HitMapper.toHit;
+import static ru.practicum.ewm.dto.HitMapper.toHitDto;
 
 @Service
 @RequiredArgsConstructor
@@ -24,18 +27,18 @@ public class StatsServiceImpl implements StatsService {
     public HitDto saveHit(HitDto hitDto) {
         log.info("Запрос на добавление hitDto {}", hitDto);
 
-        Hit hit = repository.save(HitMapper.toHit(hitDto));
+        Hit hit = repository.save(toHit(hitDto));
         log.info("Добавлен новый запрос {}", hit);
-        return HitMapper.toHitDto(hit);
+        return toHitDto(hit);
     }
 
     @Override
     public List<StatsDto> getStats(String start, String end, List<String> uris, Boolean unique) {
-        if (unique && uris == null) {
+        if (Boolean.TRUE.equals(unique) && uris == null) {
             return repository.findUniqueIpStats(LocalDateTime.parse(start, pattern), LocalDateTime.parse(end, pattern));
-        } else if (unique && uris != null) {
+        } else if (Boolean.TRUE.equals(unique) && uris != null) {
             return repository.findUniqueIpAndUriStats(LocalDateTime.parse(start, pattern), LocalDateTime.parse(end, pattern), uris);
-        } else if (!unique && uris == null) {
+        } else if (Boolean.FALSE.equals(unique) && uris == null) {
             return repository.findAll(LocalDateTime.parse(start, pattern), LocalDateTime.parse(end, pattern));
         } else {
             return repository.findUriStats(LocalDateTime.parse(start, pattern), LocalDateTime.parse(end, pattern), uris);

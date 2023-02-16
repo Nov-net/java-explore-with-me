@@ -8,6 +8,10 @@ import java.time.format.DateTimeFormatter;
 public class HitMapper {
     static final DateTimeFormatter pattern = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
+    private HitMapper() {
+        throw new IllegalStateException("Utility class");
+    }
+
     public static Hit toHit(HitDto hitDto) {
         return Hit.builder()
                 .app(hitDto.getApp())

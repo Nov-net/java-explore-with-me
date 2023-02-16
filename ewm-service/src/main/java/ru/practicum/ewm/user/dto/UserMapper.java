@@ -1,12 +1,10 @@
 package ru.practicum.ewm.user.dto;
 
-import lombok.extern.slf4j.Slf4j;
 import ru.practicum.ewm.user.model.User;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Slf4j
 public class UserMapper {
 
     public static UserDto toUserDto(User user) {
@@ -32,11 +30,10 @@ public class UserMapper {
         return user;
     }
 
-    public static User userBilder(User user) {
-        return User.builder()
+    public static UserShotDto toUserShotDto(User user) {
+        return UserShotDto.builder()
                 .id(user.getId())
                 .name(user.getName())
-                .email(user.getEmail())
                 .build();
     }
 

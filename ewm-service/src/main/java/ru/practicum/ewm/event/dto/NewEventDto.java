@@ -2,14 +2,19 @@ package ru.practicum.ewm.event.dto;
 
 import com.sun.istack.NotNull;
 import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Data;
 import lombok.experimental.FieldDefaults;
 import ru.practicum.ewm.event.model.Location;
+import ru.practicum.ewm.event.model.StateAction;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 
+@Data
+@Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class NewEventDto {
 
@@ -27,7 +32,6 @@ public class NewEventDto {
     @NotBlank
     String eventDate; // Дата и время события в формате "yyyy-MM-dd HH:mm:ss" example: 2024-12-31 15:10:05
 
-    @NotBlank
     Location location;
 
     boolean paid; // Нужно ли оплачивать участие в событии example: true default: false

@@ -33,14 +33,14 @@ public class Event {
     String annotation; // Краткое описание example: Эксклюзивность нашего шоу гарантирует привлечение...
 
     @ManyToOne
-    @JoinColumn(name = "category_id", nullable = false)
+    @JoinColumn(name = "category_id")
     Category category;
 
-    @Column
+    @Column (name = "confirmed_requests")
     @Positive
     Integer confirmedRequests; // Количество одобренных заявок на участие в данном событии example: 5
 
-    @Column(name = "created", nullable = false)
+    @Column(name = "created")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     LocalDateTime createdOn; // Дата и время создания события (в формате "yyyy-MM-dd HH:mm:ss") example: 2022-09-06 11:00:23
 

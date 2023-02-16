@@ -9,6 +9,8 @@ import ru.practicum.ewm.user.dto.UserDto;
 import ru.practicum.ewm.user.service.UserService;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
 @RestController
@@ -16,18 +18,26 @@ import java.util.List;
 @RequestMapping(path = "/admin/users")
 @Slf4j
 public class UserController {
-    private final UserService userService;
+    private final UserService service;
 
-    /*POST /users - создание нового пользователя*/
+    /*POST /admin/users - создание нового пользователя*/
     @PostMapping
     public ResponseEntity<Object> saveUser(@RequestBody @Valid UserDto userDto) {
-        return new ResponseEntity<>(userService.saveUser(userDto), HttpStatus.CREATED);
+        return new ResponseEntity<>(service.saveUser(userDto), HttpStatus.CREATED);
     }
 
-    /*DELETE /users/{userId} - удаление пользователя по userId*/
+    /*GET /admin/users - получение пользователей по списку id*/
+    @GetMapping()
+    public ResponseEntity<Object> getUser(@RequestParam(required = false) List<Long> ids,
+                                          @PositiveOrZero @RequestParam(defaultValue = "0", required = false) Integer from,
+                                          @Positive @RequestParam(defaultValue = "10", required = false) Integer size) {
+        return new ResponseEntity<>(service.getUser(ids, from, size), HttpStatus.OK);
+    }
+
+    /*DELETE /admin/users/{userId} - удаление пользователя по userId*/
     @DeleteMapping("/{userId}")
     public ResponseEntity<Object> deleteUser(@PathVariable Long userId) {
-        return new ResponseEntity<>(userService.deleteUser(userId), HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(service.deleteUser(userId), HttpStatus.NO_CONTENT);
     }
 
     /*
@@ -37,17 +47,9 @@ public class UserController {
         return userService.getAllUsers();
     }
 
-    /*PATCH /users/{userId} - обновление пользователя*//*
-    @PatchMapping("/{userId}")
-    public UserDto updateUser(@PathVariable long userId, @RequestBody UserDto userDto) {
-        return userService.updateUser(userId, userDto);
-    }
 
-    *//*GET /users/{userId} - получение пользователя по userId*//*
-    @GetMapping("/{userId}")
-    public UserDto getUserDtoById(@PathVariable(required = false) long userId) {
-        return userService.getUserDtoById(userId);
-    }
+
+
     */
 
 

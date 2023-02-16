@@ -10,15 +10,6 @@ public interface UserService {
 
     boolean deleteUser(Long userId);
 
-    /*
-    List<UserDto> getAllUsers();
+    List<UserDto> getUser(List<Long> ids, Integer from, Integer size);
 
-    UserDto saveNewUser(UserDto userDto);
-
-    UserDto updateUser(long userId, UserDto userDto);
-
-    UserDto getUserDtoById(long userId);
-
-
-*/
 }
