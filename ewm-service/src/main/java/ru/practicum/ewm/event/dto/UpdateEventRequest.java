@@ -7,14 +7,13 @@ import lombok.experimental.FieldDefaults;
 import ru.practicum.ewm.event.model.Location;
 import ru.practicum.ewm.event.model.StateAction;
 
-import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 import javax.validation.constraints.Size;
 
 @Data
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class UpdateEventUserRequest {
+public class UpdateEventRequest {
 
     @Size(min = 20, max = 2000)
     String annotation;

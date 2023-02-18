@@ -39,12 +39,23 @@ public class Validator {
     }
 
     @SneakyThrows
-    public static void isValidEventDate(LocalDateTime eventDate) {
+    public static LocalDateTime isValidEventDate(LocalDateTime eventDate) {
         if (eventDate.isBefore(LocalDateTime.now().plusHours(2))) {
             log.info("Событие не может быть ранее, чем через два часа от текущего времени");
             throw new ForbiddenException("FORBIDDEN", "For the requested operation the conditions are not met.",
-                    String.format("Field: eventDate. Error: должно содержать дату, которая еще не наступила. Value: %d", eventDate));
+                    String.format("Field: eventDate. Error: должно содержать дату, которая еще не наступила. Value: %s", eventDate));
         }
+        return eventDate;
+    }
+
+    @SneakyThrows
+    public static LocalDateTime isValidAdminEventDate(LocalDateTime eventDate) {
+        if (eventDate.isBefore(LocalDateTime.now().plusHours(1))) {
+            log.info("Событие не может быть ранее, чем через час от текущего времени");
+            throw new ForbiddenException("FORBIDDEN", "For the requested operation the conditions are not met.",
+                    String.format("Field: eventDate. Error: должно содержать дату, которая еще не наступила. Value: %s", eventDate));
+        }
+        return eventDate;
     }
 
     @SneakyThrows

@@ -10,10 +10,7 @@ import ru.practicum.ewm.user.dto.UserShotDto;
 import ru.practicum.ewm.user.model.User;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Positive;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.time.LocalDateTime;
 
 @Entity
@@ -63,7 +60,7 @@ public class Event {
     boolean paid; // Нужно ли оплачивать участие
 
     @Column(name = "participant_limit", nullable = false)
-    @Positive
+    @PositiveOrZero
     int participantLimit; // Ограничение на количество участников, 0 - отсутствие ограничения example: 10 default: 0
 
     @Column(name = "published")

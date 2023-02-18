@@ -1,6 +1,7 @@
 package ru.practicum.ewm.category.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.PageRequest;
@@ -9,6 +10,9 @@ import org.springframework.stereotype.Service;
 import ru.practicum.ewm.category.dto.CategoryDto;
 import ru.practicum.ewm.category.model.Category;
 import ru.practicum.ewm.category.repository.CategoryRepository;
+import ru.practicum.ewm.event.model.Event;
+import ru.practicum.ewm.event.repository.EventRepository;
+import ru.practicum.ewm.exception.ForbiddenException;
 import ru.practicum.ewm.exception.NotFoundException;
 
 import java.util.List;
@@ -23,6 +27,7 @@ import static ru.practicum.ewm.validator.Validator.isValidCategory;
 @Slf4j
 public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository repository;
+    private final EventRepository eventRepository;
 
     /*POST /admin/categories - создание новой категории*/
     @Override
@@ -49,8 +54,8 @@ public class CategoryServiceImpl implements CategoryService {
     /*GET /admin/categories - получение списка категорий*/
     @Override
     public List<CategoryDto> getCategory(Integer from, Integer size) {
+        log.info("Запрос на получение списка категорий from {}, size {}: {}", from, size);
         Pageable pageable = PageRequest.of(from / size, size);
-
         return mapToCategoryDto(repository.findAll(pageable).toList());
     }
 
@@ -61,11 +66,17 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     /*DELETE /admin/categories/{catId} - удаление категории по catId*/
+    @SneakyThrows
     @Override
     public boolean deleteCategory(Long catId) {
         log.info("Запрос на удаление категории с id {}", catId);
 
-        // дописать поиск событий с данной категорией, если события есть, удалять нельзя 409 конфликт
+        List<Event> list = eventRepository.findAllByCategoryId(catId);
+        if (!list.isEmpty()) {
+            log.info("Есть {} event с категорией {}", list.size(), catId);
+            throw new ForbiddenException("CONFLICT", "For the requested operation the conditions are not met.",
+                    "The category is not empty");
+        }
 
         repository.delete(isValidCategory(catId, repository.findById(catId)));
         log.info("Пользователь с id {} удален", catId);

@@ -1,10 +1,10 @@
 package ru.practicum.ewm.event.service;
 
-import ru.practicum.ewm.category.dto.CategoryDto;
 import ru.practicum.ewm.event.dto.EventFullDto;
+import ru.practicum.ewm.event.dto.EventShotDto;
 import ru.practicum.ewm.event.dto.NewEventDto;
-import ru.practicum.ewm.event.dto.UpdateEventUserRequest;
-import ru.practicum.ewm.event.model.Event;
+import ru.practicum.ewm.event.dto.UpdateEventRequest;
+import ru.practicum.ewm.event.model.State;
 
 import java.util.List;
 
@@ -12,14 +12,15 @@ public interface EventService {
 
     EventFullDto saveEvent(Long userId, NewEventDto eventDto);
 
-    EventFullDto updateEvent(Long userId, Long eventId, UpdateEventUserRequest eventDto);
-/*
+    EventFullDto userUpdateEvent(Long userId, Long eventId, UpdateEventRequest eventDto);
 
+    EventFullDto adminUpdateEvent(Long eventId, UpdateEventRequest eventDto);
 
-    List<EventFullDto> getEvent(Integer from, Integer size);
+    List<EventShotDto> getEvents(Long userId, Integer from, Integer size);
 
-    EventFullDto getEventById(Long eventId);
+    EventFullDto getEventById(Long userId, Long eventId);
 
-    boolean deleteEvent(Long eventId);*/
+    List<EventFullDto> getEventsForAdmin(List<Long> users, List<State> states, List<Long> categories,
+                                         String rangeStart, String rangeEnd, Integer from, Integer size);
 
 }

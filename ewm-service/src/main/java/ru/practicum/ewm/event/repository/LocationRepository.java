@@ -5,4 +5,8 @@ import ru.practicum.ewm.event.model.Location;
 
 public interface LocationRepository extends JpaRepository<Location, Long> {
     Location save(Location location);
+
+    Location findByLatAndLon(Float lat, Float lon);
+
+
 }

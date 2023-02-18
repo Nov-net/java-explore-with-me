@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Data
@@ -19,12 +20,13 @@ public class ApiError extends Exception{
 
     String status; // 1 enum?
 
-    LocalDateTime timestamp; // 4
+    String timestamp; // 4
 
+    private static final DateTimeFormatter pattern = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     public ApiError(String status, String reason, String message) {
         this.status = status;
         this.reason = reason;
         this.message = message;
-        this.timestamp = LocalDateTime.now();
+        this.timestamp = LocalDateTime.now().format(pattern);
     }
 }

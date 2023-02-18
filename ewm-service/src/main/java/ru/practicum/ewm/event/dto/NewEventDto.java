@@ -8,10 +8,7 @@ import lombok.experimental.FieldDefaults;
 import ru.practicum.ewm.event.model.Location;
 import ru.practicum.ewm.event.model.StateAction;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Positive;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 
 @Data
 @Builder
@@ -36,7 +33,7 @@ public class NewEventDto {
 
     boolean paid; // Нужно ли оплачивать участие в событии example: true default: false
 
-    @Positive
+    @PositiveOrZero
     int participantLimit; // Ограничение на количество участников, 0 - отсутствие ограничения example: 10 default: 0
 
     boolean requestModeration; // Нужна ли пре-модерация заявок на участие example: false default: true

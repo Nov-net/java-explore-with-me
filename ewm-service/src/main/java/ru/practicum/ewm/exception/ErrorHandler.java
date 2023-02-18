@@ -3,6 +3,7 @@ package ru.practicum.ewm.exception;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -10,15 +11,50 @@ import ru.practicum.ewm.exception.error.ApiError;
 
 import javax.persistence.EntityNotFoundException;
 import java.security.InvalidParameterException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.IllegalFormatConversionException;
 import java.util.Map;
 
 @RestControllerAdvice
 public class ErrorHandler {
+    private static final DateTimeFormatter pattern = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-    @ExceptionHandler
+    /*@ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<Map<String, String>> handleIncorrectCountException(final InvalidParameterException e) {
         return new ResponseEntity<>(Map.of("error", e.getMessage()),
+                HttpStatus.BAD_REQUEST);
+    }*/
+
+    /*@ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ApiError handleIncorrectCountException(final MethodArgumentNotValidException e) {
+        return new ApiError("BAD_REQUEST", "Incorrectly made request.", "MethodArgumentNotValidException");
+    }*/
+
+    /*@ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<Map<String, String>> handleIncorrectCountException(final IllegalFormatConversionException e) {
+        return new ResponseEntity<>(Map.of("status", "BAD_REQUEST", "reason", "Incorrectly made request.",
+                "message", String.format("Field: %s. Error: %s. Value: %d", e.getArgumentClass(), e.getMessage(), e.getConversion())), HttpStatus.BAD_REQUEST);
+    }*/
+
+    /*@ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<Map<String, String>> handleIllegalFormatConversionException(IllegalFormatConversionException e) {
+        return new ResponseEntity<>(Map.of("status", "BAD_REQUEST", "reason", "Incorrectly made request.",
+                "message", String.format("Field: %s. Error: %s. Value: %d", e.getArgumentClass(), e.getMessage(), e.getConversion())), HttpStatus.BAD_REQUEST);
+    }*/
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<Map<String, String>> handleMethodArgumentNotValidException(final MethodArgumentNotValidException e) {
+        return new ResponseEntity<>(Map.of("status", "BAD_REQUEST",
+                "reason", "Incorrectly made request.",
+                "message", String.format("Field: %s. Error: %s. Value: %s", e.getFieldError().getField(),
+                        e.getFieldError().getDefaultMessage(), e.getFieldError().getRejectedValue()),
+                "timestamp", LocalDateTime.now().format(pattern)),
                 HttpStatus.BAD_REQUEST);
     }
 
@@ -38,8 +74,9 @@ public class ErrorHandler {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public NotFoundException handleNotFoundException(final NotFoundException e) {
-        return e;
+    public ResponseEntity<Map<String, String>> handleNotFoundException(final NotFoundException e) {
+        return new ResponseEntity<>(Map.of("status", e.getStatus(), "reason", e.getReason(),
+                "message", e.getMessage(), "timestamp", e.getTimestamp()), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler
@@ -56,6 +93,7 @@ public class ErrorHandler {
                 HttpStatus.BAD_REQUEST);
     }
 
+
     @ExceptionHandler
     @ResponseStatus(HttpStatus.CONFLICT)
     public ResponseEntity<Map<String, String>> handleDataIntegrityViolationException(final DataIntegrityViolationException e) {
@@ -68,10 +106,17 @@ public class ErrorHandler {
     public ApiError handleForbiddenException(final ForbiddenException e) {
         return new ApiError(e.getStatus(), e.getReason(), e.getMessage());
     }*/
-    @ExceptionHandler
+    /*@ExceptionHandler
     @ResponseStatus(HttpStatus.CONFLICT)
     public ForbiddenException handleForbiddenException(final ForbiddenException e) {
         return e;
+    }*/
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ResponseEntity<Map<String, String>> handleForbiddenException(final ForbiddenException e) {
+        return new ResponseEntity<>(Map.of("status", e.getStatus(), "reason", e.getReason(),
+                "message", e.getMessage(), "timestamp", e.getTimestamp()), HttpStatus.CONFLICT);
     }
 
 }
