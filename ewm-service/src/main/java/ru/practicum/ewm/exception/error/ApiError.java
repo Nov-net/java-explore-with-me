@@ -10,7 +10,7 @@ import java.util.List;
 
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ApiError extends Exception{
+public class ApiError extends Exception {
 
     List<String> errors;
 
@@ -23,6 +23,7 @@ public class ApiError extends Exception{
     String timestamp;
 
     private static final DateTimeFormatter pattern = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
     public ApiError(String status, String reason, String message) {
         this.status = status;
         this.reason = reason;

@@ -27,7 +27,7 @@ public class PublicCategoryController {
 
     /*GET /admin/categories/{catId} - получение категории по id*/
     @GetMapping("/{catId}")
-    public ResponseEntity<Object> getCategoryById(@PathVariable Long catId) {
+    public ResponseEntity<CategoryDto> getCategoryById(@PathVariable Long catId) {
         return new ResponseEntity<>(service.getCategoryById(catId), HttpStatus.OK);
     }
 

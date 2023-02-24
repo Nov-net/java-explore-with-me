@@ -81,7 +81,7 @@ public class EventMapper {
                 .collect(Collectors.toList());
     }
 
-    public static UpdateStatusRequestResult toUpdateStatusRequestResult (List<Request> confirmedRequests,
+    public static UpdateStatusRequestResult toUpdateStatusRequestResult(List<Request> confirmedRequests,
                                                                          List<Request> rejectedRequests) {
         return UpdateStatusRequestResult.builder()
                 .confirmedRequests(mapToRequestDto(confirmedRequests))

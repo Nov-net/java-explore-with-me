@@ -169,7 +169,7 @@ public class EventServiceImpl implements EventService {
         log.info("Проверен инициатор");
 
         List<Request> list = requestRepository.findAllById(dto.getRequestIds());
-        for(Request r : list) {
+        for (Request r : list) {
             if (!r.getStatus().equals(Status.PENDING)) {
                 throw new ForbiddenException("BAD_REQUEST", "Incorrectly made request.",
                         "Request must have status PENDING");

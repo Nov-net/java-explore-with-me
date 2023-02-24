@@ -29,7 +29,7 @@ public class Validator {
     }
 
     @SneakyThrows
-    public static Category isValidCategory (Long catId, Optional<Category> category) {
+    public static Category isValidCategory(Long catId, Optional<Category> category) {
         if (!category.isPresent()) {
             log.info("Категория не найдена");
             throw new NotFoundException("NOT_FOUND", "The required object was not found.",
@@ -78,7 +78,7 @@ public class Validator {
     }
 
     @SneakyThrows
-    public static Request isValidRequest (Long requestId, Optional<Request> request) {
+    public static Request isValidRequest(Long requestId, Optional<Request> request) {
         if (!request.isPresent()) {
             log.info("Запрос не найден");
             throw new NotFoundException("NOT_FOUND", "The required object was not found.",
@@ -88,7 +88,7 @@ public class Validator {
     }
 
     @SneakyThrows
-    public static boolean checkParticipantLimit (Event event) {
+    public static boolean checkParticipantLimit(Event event) {
         if (event.getParticipantLimit() > 0 && event.getParticipantLimit() == event.getConfirmedRequests()) {
             log.info("Достигнут предел количества участников: {} из {}", event.getConfirmedRequests(), event.getParticipantLimit());
             throw new ForbiddenException("CONFLICT", "For the requested operation the conditions are not met.",
