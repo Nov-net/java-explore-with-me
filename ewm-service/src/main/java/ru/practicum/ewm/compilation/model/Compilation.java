@@ -2,12 +2,13 @@ package ru.practicum.ewm.compilation.model;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import ru.practicum.ewm.event.model.Event;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "сompilations")
+@Table(name = "compilations")
 @Builder
 @Data
 @AllArgsConstructor
@@ -19,13 +20,16 @@ public class Compilation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    @Transient
-    List<Long> events;
+    @ManyToMany
+    @JoinTable(name = "compilation_elements",
+            joinColumns = @JoinColumn(name = "compilation_id"),
+            inverseJoinColumns = @JoinColumn(name = "event_id"))
+    List<Event> events;
 
-    @Column(nullable = false)
-    boolean pinned; // Закреплена ли подборка на главной странице сайта example: true
+    @Column
+    Boolean pinned;
 
-    @Column(nullable = false)
-    String title; // Заголовок подборки
+    @Column
+    String title;
 
 }

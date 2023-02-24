@@ -4,11 +4,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import ru.practicum.ewm.category.model.Category;
+import ru.practicum.ewm.compilation.model.Compilation;
 import ru.practicum.ewm.event.model.Event;
-import ru.practicum.ewm.exception.AlreadyExistException;
 import ru.practicum.ewm.exception.ForbiddenException;
 import ru.practicum.ewm.exception.NotFoundException;
-import ru.practicum.ewm.exception.error.ApiError;
+import ru.practicum.ewm.request.model.Request;
 import ru.practicum.ewm.user.model.User;
 
 import java.time.LocalDateTime;
@@ -77,6 +77,34 @@ public class Validator {
         }
     }
 
+    @SneakyThrows
+    public static Request isValidRequest (Long requestId, Optional<Request> request) {
+        if (!request.isPresent()) {
+            log.info("Запрос не найден");
+            throw new NotFoundException("NOT_FOUND", "The required object was not found.",
+                    String.format("Request with id=%d was not found", requestId));
+        }
+        return request.get();
+    }
 
+    @SneakyThrows
+    public static boolean checkParticipantLimit (Event event) {
+        if (event.getParticipantLimit() > 0 && event.getParticipantLimit() == event.getConfirmedRequests()) {
+            log.info("Достигнут предел количества участников: {} из {}", event.getConfirmedRequests(), event.getParticipantLimit());
+            throw new ForbiddenException("CONFLICT", "For the requested operation the conditions are not met.",
+                    "The participant limit has been reached");
+        }
+        return true;
+    }
+
+    @SneakyThrows
+    public static Compilation isValidCompilation(Long compId, Optional<Compilation> compilation) {
+        if (compilation.isEmpty()) {
+            log.info("Подборка не найдена");
+            throw new NotFoundException("NOT_FOUND", "The required object was not found.",
+                    String.format("Compilation with id=%d was not found", compId));
+        }
+        return compilation.get();
+    }
 
 }

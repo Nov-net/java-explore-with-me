@@ -27,12 +27,12 @@ public class UpdateEventRequest {
 
     Location location;
 
-    boolean paid;
+    Boolean paid;
 
     @PositiveOrZero
-    int participantLimit;
+    Integer participantLimit;
 
-    boolean requestModeration;
+    Boolean requestModeration;
 
     StateAction stateAction;
 

@@ -1,7 +1,6 @@
 package ru.practicum.ewm.category.service;
 
 import ru.practicum.ewm.category.dto.CategoryDto;
-import ru.practicum.ewm.user.dto.UserDto;
 
 import java.util.List;
 

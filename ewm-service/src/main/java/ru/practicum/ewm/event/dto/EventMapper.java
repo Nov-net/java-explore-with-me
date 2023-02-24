@@ -1,6 +1,8 @@
 package ru.practicum.ewm.event.dto;
 
 import ru.practicum.ewm.event.model.Event;
+import ru.practicum.ewm.event.model.State;
+import ru.practicum.ewm.request.model.Request;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -8,6 +10,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static ru.practicum.ewm.category.dto.CategoryMapper.toCategoryDto;
+import static ru.practicum.ewm.request.dto.RequestMapper.mapToRequestDto;
 import static ru.practicum.ewm.user.dto.UserMapper.toUserShotDto;
 
 public class EventMapper {
@@ -17,13 +20,16 @@ public class EventMapper {
     public static Event toEvent(NewEventDto event) {
         return Event.builder()
                 .annotation(event.getAnnotation())
+                .confirmedRequests(0)
                 .createdOn(LocalDateTime.now())
                 .description(event.getDescription())
                 .eventDate(LocalDateTime.parse(event.getEventDate(), pattern))
-                .paid(event.isPaid())
+                .paid(event.getPaid())
                 .participantLimit(event.getParticipantLimit())
-                .requestModeration(event.isRequestModeration())
+                .requestModeration(event.getRequestModeration() != null ? event.getRequestModeration() : true)
+                .state(State.PENDING)
                 .title(event.getTitle())
+                .views(0L)
                 .build();
     }
 
@@ -38,10 +44,10 @@ public class EventMapper {
                 .id(event.getId())
                 .initiator(event.getInitiator() != null ? toUserShotDto(event.getInitiator()) : null)
                 .location(event.getLocation())
-                .paid(event.isPaid())
+                .paid(event.getPaid())
                 .participantLimit(event.getParticipantLimit())
                 .publishedOn(event.getPublishedOn() != null ?  event.getPublishedOn().format(pattern) : null)
-                .requestModeration(event.isRequestModeration())
+                .requestModeration(event.getRequestModeration())
                 .state(event.getState().toString())
                 .title(event.getTitle())
                 .views(event.getViews() != null ? event.getViews() : null)
@@ -63,7 +69,7 @@ public class EventMapper {
                 .id(event.getId())
                 .initiator(event.getInitiator() != null ? toUserShotDto(event.getInitiator()) : null)
                 .location(event.getLocation())
-                .paid(event.isPaid())
+                .paid(event.getPaid())
                 .title(event.getTitle())
                 .views(event.getViews() != null ? event.getViews() : null)
                 .build();
@@ -75,17 +81,12 @@ public class EventMapper {
                 .collect(Collectors.toList());
     }
 
-    /*public static Event toEvent(UpdateEventUserRequest event) {
-        return Event.builder()
-                .annotation(event.getAnnotation() != null ? event.getAnnotation() : null)
-                .createdOn(LocalDateTime.now())
-                .description(event.getDescription())
-                .eventDate(LocalDateTime.parse(event.getEventDate(), pattern))
-                .paid(event.isPaid())
-                .participantLimit(event.getParticipantLimit())
-                .requestModeration(event.isRequestModeration())
-                .title(event.getTitle())
+    public static UpdateStatusRequestResult toUpdateStatusRequestResult (List<Request> confirmedRequests,
+                                                                         List<Request> rejectedRequests) {
+        return UpdateStatusRequestResult.builder()
+                .confirmedRequests(mapToRequestDto(confirmedRequests))
+                .rejectedRequests(mapToRequestDto(rejectedRequests))
                 .build();
-    }*/
+    }
 
 }

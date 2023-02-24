@@ -1,16 +1,12 @@
 package ru.practicum.ewm.event.model;
 
-import com.sun.istack.NotNull;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.springframework.format.annotation.DateTimeFormat;
-import ru.practicum.ewm.category.dto.CategoryDto;
 import ru.practicum.ewm.category.model.Category;
-import ru.practicum.ewm.user.dto.UserShotDto;
 import ru.practicum.ewm.user.model.User;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
 import java.time.LocalDateTime;
 
 @Entity
@@ -27,26 +23,25 @@ public class Event {
     Long id;
 
     @Column(nullable = false)
-    String annotation; // Краткое описание example: Эксклюзивность нашего шоу гарантирует привлечение...
+    String annotation;
 
     @ManyToOne
     @JoinColumn(name = "category_id")
     Category category;
 
     @Column (name = "confirmed_requests")
-    @Positive
-    Integer confirmedRequests; // Количество одобренных заявок на участие в данном событии example: 5
+    Integer confirmedRequests;
 
     @Column(name = "created")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    LocalDateTime createdOn; // Дата и время создания события (в формате "yyyy-MM-dd HH:mm:ss") example: 2022-09-06 11:00:23
+    LocalDateTime createdOn;
 
     @Column(nullable = false)
-    String description; // Полное описание события example: Что получится, если соединить кукурузу и полёт? ...
+    String description;
 
     @Column(name = "event_date", nullable = false)
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    LocalDateTime eventDate; // Дата и время события (в формате "yyyy-MM-dd HH:mm:ss") example: 2024-12-31 15:10:05
+    LocalDateTime eventDate;
 
     @ManyToOne
     @JoinColumn(name = "initiator_id", nullable = false)
@@ -57,28 +52,26 @@ public class Event {
     Location location;
 
     @Column(nullable = false)
-    boolean paid; // Нужно ли оплачивать участие
+    Boolean paid;
 
     @Column(name = "participant_limit", nullable = false)
-    @PositiveOrZero
-    int participantLimit; // Ограничение на количество участников, 0 - отсутствие ограничения example: 10 default: 0
+    Integer participantLimit;
 
     @Column(name = "published")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    LocalDateTime publishedOn; // Дата и время публикации события (в формате "yyyy-MM-dd HH:mm:ss") example: 2024-12-31 15:10:05
+    LocalDateTime publishedOn;
 
     @Column(name = "request_moderation",nullable = false)
-    boolean requestModeration; // Нужна ли пре-модерация заявок на участие example: true default: true
+    Boolean requestModeration;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    State state; // Список состояний жизненного цикла события example: PUBLISHED
+    State state;
 
     @Column(nullable = false)
-    String title; // Заголовок example: Знаменитое шоу 'Летающая кукуруза'
+    String title;
 
     @Column
-    @Positive
-    Long views; // Количество просмотрев события example: 999
+    Long views;
 
 }

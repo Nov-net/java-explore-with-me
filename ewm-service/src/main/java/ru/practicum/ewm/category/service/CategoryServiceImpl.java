@@ -13,10 +13,8 @@ import ru.practicum.ewm.category.repository.CategoryRepository;
 import ru.practicum.ewm.event.model.Event;
 import ru.practicum.ewm.event.repository.EventRepository;
 import ru.practicum.ewm.exception.ForbiddenException;
-import ru.practicum.ewm.exception.NotFoundException;
 
 import java.util.List;
-import java.util.Optional;
 
 import static ru.practicum.ewm.category.dto.CategoryMapper.*;
 import static ru.practicum.ewm.validator.Validator.isValidCategory;

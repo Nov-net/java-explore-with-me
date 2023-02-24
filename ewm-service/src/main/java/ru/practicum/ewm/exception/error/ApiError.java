@@ -14,13 +14,13 @@ public class ApiError extends Exception{
 
     List<String> errors;
 
-    String message; // 3
+    String message;
 
-    String reason; // 2
+    String reason;
 
-    String status; // 1 enum?
+    String status;
 
-    String timestamp; // 4
+    String timestamp;
 
     private static final DateTimeFormatter pattern = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     public ApiError(String status, String reason, String message) {

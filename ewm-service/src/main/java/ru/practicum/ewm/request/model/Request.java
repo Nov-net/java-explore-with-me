@@ -18,20 +18,20 @@ public class Request {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id; // Идентификатор заявки example: 3
+    Long id;
 
     @Column(nullable = false)
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    LocalDateTime created; // Дата и время создания заявки example: 2022-09-06T21:10:05.432
+    LocalDateTime created;
 
     @Column(nullable = false)
-    Long event; // Идентификатор события example: 1
+    Long event;
 
     @Column(nullable = false)
-    Long requester; // Идентификатор пользователя, отправившего заявку example: 2
+    Long requester;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    Status status; // Статус заявки example: PENDING
+    Status status;
 
 }

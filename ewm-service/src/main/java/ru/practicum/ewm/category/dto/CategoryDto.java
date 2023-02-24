@@ -7,8 +7,6 @@ import javax.validation.constraints.NotBlank;
 
 @Data
 @Builder
-@AllArgsConstructor
-@NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CategoryDto {
 
