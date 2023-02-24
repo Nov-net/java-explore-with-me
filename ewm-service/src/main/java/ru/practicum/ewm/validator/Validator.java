@@ -89,7 +89,7 @@ public class Validator {
 
     @SneakyThrows
     public static boolean checkParticipantLimit(Event event) {
-        if (!event.getParticipantLimit().equals(0) && event.getConfirmedRequests().equals(event.getParticipantLimit())) {
+        if (event.getConfirmedRequests().equals(event.getParticipantLimit()) && !event.getParticipantLimit().equals(0)) {
             log.info("Достигнут предел количества участников: {} из {}", event.getConfirmedRequests(), event.getParticipantLimit());
             throw new ForbiddenException("CONFLICT", "For the requested operation the conditions are not met.",
                     "The participant limit has been reached");
