@@ -5,11 +5,11 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.ewm.category.repository.CategoryRepository;
 import ru.practicum.client.StatsClient;
 import ru.practicum.dto.HitDto;
@@ -39,7 +39,7 @@ import static ru.practicum.ewm.validator.Validator.*;
 
 @Service
 @RequiredArgsConstructor
-@Primary
+@Transactional(readOnly = true)
 @Slf4j
 public class EventServiceImpl implements EventService {
     private final EventRepository repository;
