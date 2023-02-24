@@ -39,7 +39,6 @@ import static ru.practicum.ewm.validator.Validator.*;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 @Slf4j
 public class EventServiceImpl implements EventService {
     private final EventRepository repository;
