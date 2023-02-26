@@ -120,7 +120,7 @@ public class Validator {
     }
 
     @SneakyThrows
-    public static void checkPendingStatusForListRequest(List<Request> list){
+    public static void checkPendingStatusForListRequest(List<Request> list) {
         for (Request r : list) {
             if (!r.getStatus().equals(Status.PENDING)) {
                 throw new ForbiddenException("BAD_REQUEST", "Incorrectly made request.",

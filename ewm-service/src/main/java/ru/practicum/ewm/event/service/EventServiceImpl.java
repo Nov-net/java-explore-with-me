@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import ru.practicum.ewm.category.repository.CategoryRepository;
 import ru.practicum.client.StatsClient;
 import ru.practicum.dto.HitDto;
-import ru.practicum.ewm.comment.dto.CommentMapper;
 import ru.practicum.ewm.comment.repository.CommentRepository;
 import ru.practicum.ewm.event.dto.*;
 import ru.practicum.ewm.event.model.*;
