@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import ru.practicum.ewm.category.repository.CategoryRepository;
 import ru.practicum.client.StatsClient;
 import ru.practicum.dto.HitDto;
+import ru.practicum.ewm.comment.dto.CommentMapper;
+import ru.practicum.ewm.comment.repository.CommentRepository;
 import ru.practicum.ewm.event.dto.*;
 import ru.practicum.ewm.event.model.*;
 import ru.practicum.ewm.event.repository.EventRepository;
@@ -30,7 +32,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static ru.practicum.ewm.comment.dto.CommentMapper.mapToCommentDto;
 import static ru.practicum.ewm.event.dto.EventMapper.*;
+import static ru.practicum.ewm.event.dto.EventMapper.mapToEventShotDto;
 import static ru.practicum.ewm.event.model.State.*;
 import static ru.practicum.ewm.event.model.StateAction.*;
 import static ru.practicum.ewm.request.dto.RequestMapper.mapToRequestDto;
@@ -46,6 +50,7 @@ public class EventServiceImpl implements EventService {
     private final CategoryRepository categoryRepository;
     private final RequestRepository requestRepository;
     private final StatsClient statsClient;
+    private final CommentRepository commentRepository;
     static final DateTimeFormatter pattern = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     /*POST /users/{userId}/events - добавление нового события юзером*/
@@ -132,14 +137,17 @@ public class EventServiceImpl implements EventService {
     public List<EventShotDto> getEventsForUser(Long userId, Integer from, Integer size) {
         log.info("Получение списка events пользователя userId={} from {}, size {}", userId, from, size);
         Pageable pageable = PageRequest.of(from / size, size);
-        return mapToEventShotDto(repository.findAllByInitiatorId(userId, pageable));
+
+        return mapToEventShotDto(repository.findAllByInitiatorId(userId, pageable)).stream()
+                .map(this::setCommentsForEventShotDto)
+                .collect(Collectors.toList());
     }
 
     /*GET /users/{userId}/events/{eventId} - получение события, добавленного текущим пользователем по id*/
     @Override
     public EventFullDto getEventById(Long userId, Long eventId) {
         log.info("Получение event пользователя userId={}, eventId={}", userId, eventId);
-        return toEventFullDto(isValidEvent(eventId, repository.findByIdAndInitiatorId(eventId, userId)));
+        return setCommentsForEventFullDto(toEventFullDto(isValidEvent(eventId, repository.findByIdAndInitiatorId(eventId, userId))));
     }
 
     /*GET /users/{userId}/events/{eventId}/requests - получение запросов на участие в событии пользователя по eventId*/
@@ -162,19 +170,12 @@ public class EventServiceImpl implements EventService {
         log.info("Запрос на обновление статусов заявок eventId={} от userId={}: {}", eventId, userId, dto);
 
         Event event = isValidEvent(eventId, repository.findById(eventId));
-        log.info("Получен {}", event);
         isInitiator(userId, event);
         log.info("Проверен инициатор");
 
         List<Request> list = requestRepository.findAllById(dto.getRequestIds());
-        for (Request r : list) {
-            if (!r.getStatus().equals(Status.PENDING)) {
-                throw new ForbiddenException("BAD_REQUEST", "Incorrectly made request.",
-                        "Request must have status PENDING");
-            }
-        }
-        log.info("Проверен статус PENDING у заявок в количестве {}", dto.getRequestIds().size());
-        log.info("Список заявок: {}", list);
+        checkPendingStatusForListRequest(list);
+        log.info("Проверен статус PENDING у заявок в количестве {}", list.size());
 
         List<Request> confirmedRequests = new ArrayList<>();
         List<Request> rejectedRequests = new ArrayList<>();
@@ -182,56 +183,23 @@ public class EventServiceImpl implements EventService {
         if (Status.CONFIRMED.equals(dto.getStatus())) {
             checkParticipantLimit(event);
             int available = event.getParticipantLimit() - event.getConfirmedRequests();
-            log.info("Event проверен, доступно к добавлению {} участников", available);
+            log.info("Доступно к добавлению {} участников, запрос на добавление {} участников", available, dto.getRequestIds().size());
 
             if (available >= dto.getRequestIds().size()) {
-                log.info("Доступно к добавлению {} участников, запрос на добавление {} участников", available, dto.getRequestIds().size());
-                for (Request r : list) {
-                    r.setStatus(Status.CONFIRMED);
-                    log.info("Заявке {} установлен статус CONFIRMED", r);
-
-                    confirmedRequests.add(requestRepository.save(r));
-                    log.info("Заявка сохранена и добавлена в list confirmedRequests");
-
-                    event.setConfirmedRequests((event.getConfirmedRequests() + 1));
-                    log.info("Событию установлен confirmedRequests {}", event.getConfirmedRequests());
-                    repository.save(event);
-                    log.info("Событие сохранено");
-                }
+                confirmedRequests = setRequestStatusConfirmed(list, confirmedRequests, event);
 
             } else {
-                log.info("Доступно к добавлению {} участников, запрос на добавление {} участников", available, dto.getRequestIds().size());
+                List<Request> listForConfirmed = new ArrayList<>();
                 for (int i = 0; i < available; i++) {
-                    Request request = list.remove(i);
-                    log.info("Получена заявка {}", request);
-                    request.setStatus(Status.CONFIRMED);
-                    log.info("Заявке {} установлен статус CONFIRMED", request);
-
-                    confirmedRequests.add(requestRepository.save(request));
-                    log.info("Заявка сохранена и добавлена в list confirmedRequests");
-
-                    event.setConfirmedRequests((event.getConfirmedRequests() + 1));
-                    log.info("Событию установлен confirmedRequests {}", event.getConfirmedRequests());
-                    repository.save(event);
-                    log.info("Событие сохранено");
+                    listForConfirmed.add(list.remove(i));
                 }
-
-                for (Request r : list) {
-                    r.setStatus(Status.REJECTED);
-                    log.info("Заявке {} установлен статус REJECTED", r);
-                    rejectedRequests.add(requestRepository.save(r));
-                    log.info("Заявка сохранена и добавлена в list rejectedRequests");
-                }
+                confirmedRequests = setRequestStatusConfirmed(listForConfirmed, confirmedRequests, event);
+                rejectedRequests = setRequestStatusRejected(list, rejectedRequests);
             }
         }
 
         if (Status.REJECTED.equals(dto.getStatus())) {
-            for (Request r : list) {
-                r.setStatus(Status.REJECTED);
-                log.info("Заявке {} установлен статус REJECTED", r);
-                rejectedRequests.add(requestRepository.save(r));
-                log.info("Заявка сохранена и добавлена в list rejectedRequests");
-            }
+            rejectedRequests = setRequestStatusRejected(list, rejectedRequests);
         }
 
         return toUpdateStatusRequestResult(confirmedRequests, rejectedRequests);
@@ -262,9 +230,13 @@ public class EventServiceImpl implements EventService {
 
         Pageable pageable = PageRequest.of(from / size, size);
 
-        Predicate predicate = predicates.stream().reduce(BooleanExpression::and).get();
+        Predicate predicate = predicates.stream()
+                .reduce(BooleanExpression::and)
+                .get();
 
-        return mapToEventFullDto(repository.findAll(predicate, pageable).toList());
+        return mapToEventFullDto(repository.findAll(predicate, pageable).toList()).stream()
+                .map(this::setCommentsForEventFullDto)
+                .collect(Collectors.toList());
     }
 
     /*GET /events - получение списка событий по параметрам*/
@@ -324,7 +296,9 @@ public class EventServiceImpl implements EventService {
                 .collect(Collectors.toList());
         log.info("Установили новое значение просмотров списку events длиной {} элементов", list.size());
 
-        return mapToEventShotDto(list);
+        return mapToEventShotDto(list).stream()
+                .map(this::setCommentsForEventShotDto)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -335,7 +309,7 @@ public class EventServiceImpl implements EventService {
                                                                     LocalDateTime.now().format(pattern)));
         log.info("Отправили статистику в statsClient: ewm-service, {}, {}", request.getRequestURI(), request.getRemoteAddr());
 
-        return toEventFullDto(setViews(isValidEvent(eventId, repository.findByIdAndState(eventId, PUBLISHED))));
+        return setCommentsForEventFullDto(toEventFullDto(setViews(isValidEvent(eventId, repository.findByIdAndState(eventId, PUBLISHED)))));
     }
 
     private Event setData(Event event, UpdateEventRequest eventDto) {
@@ -388,24 +362,11 @@ public class EventServiceImpl implements EventService {
         return event;
     }
 
-    @SneakyThrows
     private Event checkAndSetState(Event event, UpdateEventRequest eventDto) {
         if (eventDto.getStateAction() != null) {
-
-            if (event.getState().equals(PUBLISHED)) {
-                throw new ForbiddenException("FORBIDDEN", "For the requested operation the conditions are not met.",
-                        "Cannot publish the event because it's not in the right state: PUBLISHED");
-            }
-
-            if (event.getState().equals(CANCELED) && eventDto.getStateAction().equals(REJECT_EVENT)) {
-                throw new ForbiddenException("FORBIDDEN", "For the requested operation the conditions are not met.",
-                        "The event cannot be canceled because it has the status: CANCELED.");
-            }
-
-            if (event.getState().equals(CANCELED) && eventDto.getStateAction().equals(PUBLISH_EVENT)) {
-                throw new ForbiddenException("FORBIDDEN", "For the requested operation the conditions are not met.",
-                        "The event cannot be published because it has the status: CANCELED.");
-            }
+            isEventNotPublished(event);
+            isEventNotCanceledAndDtoNotReject(event, eventDto);
+            isEventNotCanceledAndDtoNotPublish(event, eventDto);
 
             if (eventDto.getStateAction().equals(CANCEL_REVIEW)) {
                 event.setState(CANCELED);
@@ -438,6 +399,49 @@ public class EventServiceImpl implements EventService {
     private Event setViews(Event event) {
         event.setViews(event.getViews() + 1);
         return repository.save(event);
+    }
+
+    private List<Request> setRequestStatusConfirmed(List<Request> list, List<Request> confirmedRequests, Event event) {
+        for (Request r : list) {
+            r.setStatus(Status.CONFIRMED);
+            log.info("Заявке {} установлен статус CONFIRMED", r);
+
+            confirmedRequests.add(requestRepository.save(r));
+            log.info("Заявка сохранена и добавлена в list confirmedRequests");
+
+            setEventConfirmedRequests(event);
+        }
+
+        return confirmedRequests;
+    }
+
+    private List<Request> setRequestStatusRejected(List<Request> listRequests, List<Request> rejectedRequests) {
+        for (Request r : listRequests) {
+            r.setStatus(Status.REJECTED);
+            log.info("Заявке {} установлен статус REJECTED", r);
+            rejectedRequests.add(requestRepository.save(r));
+            log.info("Заявка сохранена и добавлена в list rejectedRequests");
+        }
+        return rejectedRequests;
+    }
+
+    private void setEventConfirmedRequests(Event event) {
+        event.setConfirmedRequests((event.getConfirmedRequests() + 1));
+        log.info("Событию установлен confirmedRequests {}", event.getConfirmedRequests());
+        repository.save(event);
+        log.info("Событие сохранено");
+    }
+
+    private EventFullDto setCommentsForEventFullDto(EventFullDto event) {
+        event.setComments(mapToCommentDto(commentRepository.findAllByEventIdIsOrderById(event.getId())));
+        log.info("Установили comments: {}", event.getComments());
+        return event;
+    }
+
+    private EventShotDto setCommentsForEventShotDto(EventShotDto event) {
+        event.setComments(mapToCommentDto(commentRepository.findAllByEventIdIsOrderById(event.getId())));
+        log.info("Установили comments: {}", event.getComments());
+        return event;
     }
 
 }

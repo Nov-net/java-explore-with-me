@@ -64,5 +64,7 @@ CREATE TABLE IF NOT EXISTS comments (
     text VARCHAR(1000) NOT NULL,
     event_id INTEGER NOT NULL REFERENCES events (id),
     author_id INTEGER NOT NULL REFERENCES users (id),
-    created  TIMESTAMP WITHOUT TIME ZONE
+    state VARCHAR(55) NOT NULL,
+    created  TIMESTAMP WITHOUT TIME ZONE,
+    published TIMESTAMP WITHOUT TIME ZONE
 );

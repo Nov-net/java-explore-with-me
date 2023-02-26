@@ -5,8 +5,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
 import ru.practicum.ewm.category.dto.CategoryDto;
+import ru.practicum.ewm.comment.dto.CommentDto;
 import ru.practicum.ewm.event.model.Location;
 import ru.practicum.ewm.user.dto.UserShotDto;
+
+import java.util.List;
 
 @Data
 @Builder
@@ -28,4 +31,5 @@ public class EventFullDto {
     String state;
     String title;
     Long views;
+    List<CommentDto> comments;
 }

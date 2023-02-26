@@ -1,10 +1,13 @@
 package ru.practicum.ewm.category.dto;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import ru.practicum.ewm.category.model.Category;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CategoryMapper {
 
     public static CategoryDto toCategoryDto(Category category) {

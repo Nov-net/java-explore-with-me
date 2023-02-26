@@ -1,10 +1,13 @@
 package ru.practicum.ewm.user.dto;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import ru.practicum.ewm.user.model.User;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class UserMapper {
 
     public static UserDto toUserDto(User user) {
@@ -22,12 +25,11 @@ public class UserMapper {
     }
 
     public static User toUser(UserDto userDto) {
-        User user = User.builder()
+        return User.builder()
                 .id(userDto.getId())
                 .name(userDto.getName())
                 .email(userDto.getEmail() != null ? userDto.getEmail() : null)
                 .build();
-        return user;
     }
 
     public static UserShotDto toUserShotDto(User user) {
