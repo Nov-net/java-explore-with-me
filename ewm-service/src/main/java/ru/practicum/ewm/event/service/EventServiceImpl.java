@@ -14,7 +14,6 @@ import ru.practicum.client.StatsClient;
 import ru.practicum.dto.HitDto;
 import ru.practicum.ewm.comment.dto.CommentDto;
 import ru.practicum.ewm.comment.dto.CommentMapper;
-import ru.practicum.ewm.comment.model.Comment;
 import ru.practicum.ewm.comment.model.StateComment;
 import ru.practicum.ewm.comment.repository.CommentRepository;
 import ru.practicum.ewm.event.dto.*;
@@ -35,7 +34,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static ru.practicum.ewm.comment.dto.CommentMapper.mapToCommentDto;
 import static ru.practicum.ewm.event.dto.EventMapper.*;
 import static ru.practicum.ewm.event.dto.EventMapper.mapToEventShotDto;
 import static ru.practicum.ewm.event.model.State.*;
