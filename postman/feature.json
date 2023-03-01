@@ -1307,6 +1307,178 @@
 			"name": "get event with comment",
 			"item": [
 				{
+					"name": "get event private without comments (EventFullDto)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Ответ должен содержать код статуса 200 и данные в формате json\", function () {\r",
+									"    pm.response.to.have.status(200);  \r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"const target = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Событие должно содержать поля: id, title, annotation, category, paid, eventDate, initiator, description, participantLimit, state, createdOn, location, requestModeration, comments\", function () {\r",
+									"pm.expect(target).to.have.property('id');\r",
+									"pm.expect(target).to.have.property('title');\r",
+									"pm.expect(target).to.have.property('annotation');\r",
+									"pm.expect(target).to.have.property('category');\r",
+									"pm.expect(target).to.have.property('paid');\r",
+									"pm.expect(target).to.have.property('eventDate');\r",
+									"pm.expect(target).to.have.property('initiator');\r",
+									"pm.expect(target).to.have.property('description');\r",
+									"pm.expect(target).to.have.property('participantLimit');\r",
+									"pm.expect(target).to.have.property('state');\r",
+									"pm.expect(target).to.have.property('createdOn');\r",
+									"pm.expect(target).to.have.property('location');\r",
+									"pm.expect(target).to.have.property('requestModeration');\r",
+									"pm.expect(target).to.have.property('comments');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test get event 1 without comments\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.id, '\"id\" field').to.eql(1);\r",
+									"    pm.expect(jsonData.comments.length, 'length of \"comments\" field').to.eql(0);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/users/1/events/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"users",
+								"1",
+								"events",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update state event admin",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"stateAction\": \"PUBLISH_EVENT\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/admin/events/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"admin",
+								"events",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get event public without comments (EventShotDto)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Ответ должен содержать код статуса 200 и данные в формате json\", function () {\r",
+									"    pm.response.to.have.status(200);  \r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"const target = pm.response.json()[0];\r",
+									"\r",
+									"pm.test(\"Событие должно содержать поля: id, title, annotation, category, paid, eventDate, initiator, confirmedRequests, views, location, comments\", function () {\r",
+									"pm.expect(target).to.have.property('id');\r",
+									"pm.expect(target).to.have.property('title');\r",
+									"pm.expect(target).to.have.property('annotation');\r",
+									"pm.expect(target).to.have.property('category');\r",
+									"pm.expect(target).to.have.property('paid');\r",
+									"pm.expect(target).to.have.property('eventDate');\r",
+									"pm.expect(target).to.have.property('initiator');\r",
+									"pm.expect(target).to.have.property('confirmedRequests');\r",
+									"pm.expect(target).to.have.property('views');\r",
+									"pm.expect(target).to.have.property('location');\r",
+									"pm.expect(target).to.have.property('comments');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test get event 1 without comments\", function () {\r",
+									"    var jsonData = pm.response.json()[0];\r",
+									"    pm.expect(jsonData.id, '\"id\" field').to.eql(1);\r",
+									"    pm.expect(jsonData.comments.length, 'length of \"comments\" field').to.eql(0);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/events",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"events"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "add comment 2",
 					"event": [
 						{
@@ -1427,178 +1599,6 @@
 								"2",
 								"comments",
 								"1"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "get event private without comments (EventFullDto)",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Ответ должен содержать код статуса 200 и данные в формате json\", function () {\r",
-									"    pm.response.to.have.status(200);  \r",
-									"    pm.response.to.be.withBody;\r",
-									"    pm.response.to.be.json;\r",
-									"});\r",
-									"\r",
-									"const target = pm.response.json();\r",
-									"\r",
-									"pm.test(\"Событие должно содержать поля: id, title, annotation, category, paid, eventDate, initiator, description, participantLimit, state, createdOn, location, requestModeration, comments\", function () {\r",
-									"pm.expect(target).to.have.property('id');\r",
-									"pm.expect(target).to.have.property('title');\r",
-									"pm.expect(target).to.have.property('annotation');\r",
-									"pm.expect(target).to.have.property('category');\r",
-									"pm.expect(target).to.have.property('paid');\r",
-									"pm.expect(target).to.have.property('eventDate');\r",
-									"pm.expect(target).to.have.property('initiator');\r",
-									"pm.expect(target).to.have.property('description');\r",
-									"pm.expect(target).to.have.property('participantLimit');\r",
-									"pm.expect(target).to.have.property('state');\r",
-									"pm.expect(target).to.have.property('createdOn');\r",
-									"pm.expect(target).to.have.property('location');\r",
-									"pm.expect(target).to.have.property('requestModeration');\r",
-									"pm.expect(target).to.have.property('comments');\r",
-									"});\r",
-									"\r",
-									"pm.test(\"Test get event 1 without comments\", function () {\r",
-									"    var jsonData = pm.response.json();\r",
-									"    pm.expect(jsonData.id, '\"id\" field').to.eql(1);\r",
-									"    pm.expect(jsonData.comments.length, 'length of \"comments\" field').to.eql(0);\r",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8080/users/1/events/1",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"users",
-								"1",
-								"events",
-								"1"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "update state event admin",
-					"request": {
-						"method": "PATCH",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"stateAction\": \"PUBLISH_EVENT\",\r\n    \"eventDate\": \"2025-02-18 12:43:19\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8080/admin/events/1",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"admin",
-								"events",
-								"1"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "get event public without comments (EventShotDto)",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Ответ должен содержать код статуса 200 и данные в формате json\", function () {\r",
-									"    pm.response.to.have.status(200);  \r",
-									"    pm.response.to.be.withBody;\r",
-									"    pm.response.to.be.json;\r",
-									"});\r",
-									"\r",
-									"const target = pm.response.json()[0];\r",
-									"\r",
-									"pm.test(\"Событие должно содержать поля: id, title, annotation, category, paid, eventDate, initiator, confirmedRequests, views, location, comments\", function () {\r",
-									"pm.expect(target).to.have.property('id');\r",
-									"pm.expect(target).to.have.property('title');\r",
-									"pm.expect(target).to.have.property('annotation');\r",
-									"pm.expect(target).to.have.property('category');\r",
-									"pm.expect(target).to.have.property('paid');\r",
-									"pm.expect(target).to.have.property('eventDate');\r",
-									"pm.expect(target).to.have.property('initiator');\r",
-									"pm.expect(target).to.have.property('confirmedRequests');\r",
-									"pm.expect(target).to.have.property('views');\r",
-									"pm.expect(target).to.have.property('location');\r",
-									"pm.expect(target).to.have.property('comments');\r",
-									"});\r",
-									"\r",
-									"pm.test(\"Test get event 1 without comments\", function () {\r",
-									"    var jsonData = pm.response.json()[0];\r",
-									"    pm.expect(jsonData.id, '\"id\" field').to.eql(1);\r",
-									"    pm.expect(jsonData.comments.length, 'length of \"comments\" field').to.eql(0);\r",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8080/events",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"events"
 							]
 						}
 					},
