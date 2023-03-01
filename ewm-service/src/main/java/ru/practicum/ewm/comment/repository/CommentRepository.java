@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import ru.practicum.ewm.comment.model.Comment;
+import ru.practicum.ewm.comment.model.StateComment;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,7 +18,7 @@ public interface CommentRepository extends JpaRepository<Comment, Long>, Queryds
 
     Optional<Comment> findById(Long id);
 
-    List<Comment> findAllByEventIdIsOrderById(Long eventId);
+    List<Comment> findAllByEventIdAndStateIsOrderById(Long eventId, StateComment state);
 
     void delete(Comment comment);
 

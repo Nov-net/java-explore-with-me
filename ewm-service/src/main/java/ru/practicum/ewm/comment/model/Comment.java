@@ -34,6 +34,7 @@ public class Comment {
     User author;
 
     @Column
+    @Enumerated(EnumType.STRING)
     StateComment state;
 
     @Column

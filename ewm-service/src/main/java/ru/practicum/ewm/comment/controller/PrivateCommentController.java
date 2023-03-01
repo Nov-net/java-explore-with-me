@@ -54,8 +54,8 @@ public class PrivateCommentController {
         return new ResponseEntity<>(service.getCommentByUserId(userId, from, size), HttpStatus.OK);
     }
 
-    /*GET /users/{userId}/comments/{eventId} - получение списка комментов по eventId*/
-    @GetMapping("/{eventId}")
+    /*GET /users/{userId}/comments/event/{eventId} - получение списка комментов по eventId*/
+    @GetMapping("/event/{eventId}")
     public ResponseEntity<List<CommentDto>> getCommentByUserIdAndEventId(@PathVariable  Long userId, @PathVariable  Long eventId) {
         return new ResponseEntity<>(service.getCommentByUserIdAndEventId(userId, eventId), HttpStatus.OK);
     }

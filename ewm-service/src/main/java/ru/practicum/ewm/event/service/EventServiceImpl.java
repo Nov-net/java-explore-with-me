@@ -12,6 +12,10 @@ import org.springframework.stereotype.Service;
 import ru.practicum.ewm.category.repository.CategoryRepository;
 import ru.practicum.client.StatsClient;
 import ru.practicum.dto.HitDto;
+import ru.practicum.ewm.comment.dto.CommentDto;
+import ru.practicum.ewm.comment.dto.CommentMapper;
+import ru.practicum.ewm.comment.model.Comment;
+import ru.practicum.ewm.comment.model.StateComment;
 import ru.practicum.ewm.comment.repository.CommentRepository;
 import ru.practicum.ewm.event.dto.*;
 import ru.practicum.ewm.event.model.*;
@@ -432,15 +436,21 @@ public class EventServiceImpl implements EventService {
     }
 
     private EventFullDto setCommentsForEventFullDto(EventFullDto event) {
-        event.setComments(mapToCommentDto(commentRepository.findAllByEventIdIsOrderById(event.getId())));
+        event.setComments(getListCommentDto(event.getId()));
         log.info("Установили comments: {}", event.getComments());
         return event;
     }
 
     private EventShotDto setCommentsForEventShotDto(EventShotDto event) {
-        event.setComments(mapToCommentDto(commentRepository.findAllByEventIdIsOrderById(event.getId())));
+        event.setComments(getListCommentDto(event.getId()));
         log.info("Установили comments: {}", event.getComments());
         return event;
+    }
+
+    private List<CommentDto> getListCommentDto(Long eventId) {
+        return commentRepository.findAllByEventIdAndStateIsOrderById(eventId, StateComment.PUBLISHED).stream()
+                .map(CommentMapper::toCommentDto)
+                .collect(Collectors.toList());
     }
 
 }

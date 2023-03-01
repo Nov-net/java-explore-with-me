@@ -68,6 +68,9 @@ public class CommentServiceImpl implements CommentService {
         Comment comment = isValidComment(commId, repository.findById(commId));
         log.info("Нашли и проверили comment: {}", comment);
 
+        isAuthor(userId, comment);
+        log.info("Проверили userId == comment.getAuthor().getId()");
+
         if (commentDto.getText() != null) {
             comment.setText(commentDto.getText());
             log.info("Обновлен text: {}", comment.getText());
@@ -123,6 +126,9 @@ public class CommentServiceImpl implements CommentService {
 
         Comment comment = isValidComment(commId, repository.findById(commId));
         log.info("Нашли и проверили comment: {}", comment);
+
+        isAuthor(userId, comment);
+        log.info("Проверили userId == comment.getAuthor().getId()");
 
         repository.delete(isValidComment(commId, repository.findById(commId)));
         log.info("commId={} удален", commId);

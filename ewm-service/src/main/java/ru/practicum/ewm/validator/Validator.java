@@ -171,4 +171,13 @@ public class Validator {
         }
     }
 
+    @SneakyThrows
+    public static void isAuthor(Long userId, Comment comment) {
+        if (!userId.equals(comment.getAuthor().getId())) {
+            log.info("userId != comment.getAuthor().getId()");
+            throw new ForbiddenException("BAD_REQUEST", "Incorrectly made request.",
+                    String.format("Пользователь с userId %d не является автором комментария", userId));
+        }
+    }
+
 }
