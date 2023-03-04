@@ -101,14 +101,14 @@ public class EventServiceImpl implements EventService {
         isInitiator(userId, event);
         log.info("Проверен инициатор");
 
-        event = checkAndSetState(event, eventDto);
+        Event checkedEvent = checkAndSetState(event, eventDto);
 
         if (eventDto.getEventDate() != null) {
-            event.setEventDate(isValidEventDate(LocalDateTime.parse(eventDto.getEventDate(), pattern)));
-            log.info("Время события проверено и установлено {}", event.getEventDate().format(pattern));
+            checkedEvent.setEventDate(isValidEventDate(LocalDateTime.parse(eventDto.getEventDate(), pattern)));
+            log.info("Время события проверено и установлено {}", checkedEvent.getEventDate().format(pattern));
         }
 
-        Event updEvent = repository.save(setData(event, eventDto));
+        Event updEvent = repository.save(setData(checkedEvent, eventDto));
         log.info("Event обновлен: {}", updEvent);
         return toEventFullDto(updEvent);
     }
@@ -121,14 +121,14 @@ public class EventServiceImpl implements EventService {
         Event event = isValidEvent(eventId, repository.findById(eventId));
         log.info("Получен {}", event);
 
-        event = checkAndSetState(event, eventDto);
+        Event checkedEvent = checkAndSetState(event, eventDto);
 
         if (eventDto.getEventDate() != null) {
-            event.setEventDate(isValidAdminEventDate(LocalDateTime.parse(eventDto.getEventDate(), pattern)));
-            log.info("Время события проверено и установлено {}", event.getEventDate().format(pattern));
+            checkedEvent.setEventDate(isValidAdminEventDate(LocalDateTime.parse(eventDto.getEventDate(), pattern)));
+            log.info("Время события проверено и установлено {}", checkedEvent.getEventDate().format(pattern));
         }
 
-        Event updEvent = repository.save(setData(event, eventDto));
+        Event updEvent = repository.save(setData(checkedEvent, eventDto));
         log.info("Event обновлен: {}", updEvent);
         return toEventFullDto(updEvent);
     }

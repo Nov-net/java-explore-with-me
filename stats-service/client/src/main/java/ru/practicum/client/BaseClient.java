@@ -16,18 +16,18 @@ public class BaseClient {
     }
 
     protected ResponseEntity<Object> get(String path, @Nullable Map<String, Object> parameters) {
-        return get(path, parameters, null);
+        return gets(path, parameters);
     }
 
-    protected ResponseEntity<Object> get(String path, @Nullable Map<String, Object> parameters, @Nullable Object body) {
+    protected ResponseEntity<Object> gets(String path, @Nullable Map<String, Object> parameters) {
         return makeAndSendRequest(HttpMethod.GET, path, parameters, null);
     }
 
     protected <T> ResponseEntity<Object> post(String path, T body) {
-        return post(path, null, body);
+        return posts(path, body);
     }
 
-    protected <T> ResponseEntity<Object> post(String path, @Nullable Map<String, Object> parameters, T body) {
+    protected <T> ResponseEntity<Object> posts(String path, T body) {
         return makeAndSendRequest(HttpMethod.POST, path, null, body);
     }
 

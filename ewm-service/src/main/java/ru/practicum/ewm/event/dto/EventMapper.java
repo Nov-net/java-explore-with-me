@@ -29,7 +29,7 @@ public class EventMapper {
                 .eventDate(LocalDateTime.parse(event.getEventDate(), pattern))
                 .paid(event.getPaid())
                 .participantLimit(event.getParticipantLimit())
-                .requestModeration(event.getRequestModeration() != null ? event.getRequestModeration() : true)
+                .requestModeration(!event.getRequestModeration() ? false : true)
                 .state(State.PENDING)
                 .title(event.getTitle())
                 .views(0L)
