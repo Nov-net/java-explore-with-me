@@ -1,16 +1,16 @@
 package ru.practicum.ewm.compilation.dto;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import ru.practicum.ewm.compilation.model.Compilation;
 
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static ru.practicum.ewm.event.dto.EventMapper.mapToEventShotDto;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CompilationMapper {
-
-    static final DateTimeFormatter pattern = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     public static CompilationDto toCompilationDto(Compilation compilation) {
         return CompilationDto.builder()
@@ -29,7 +29,7 @@ public class CompilationMapper {
 
     public static Compilation toCompilation(NewCompilationDto compilationDto) {
         return Compilation.builder()
-                .pinned(compilationDto.getPinned() != null ? compilationDto.getPinned() : false)
+                .pinned(compilationDto.getPinned() != null && compilationDto.getPinned())
                 .title(compilationDto.getTitle())
                 .build();
     }

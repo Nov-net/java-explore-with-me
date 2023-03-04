@@ -1,5 +1,7 @@
 package ru.practicum.ewm.request.dto;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import ru.practicum.ewm.request.model.Request;
 
 import java.time.LocalDateTime;
@@ -9,6 +11,7 @@ import java.util.stream.Collectors;
 
 import static ru.practicum.ewm.request.model.Status.PENDING;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class RequestMapper {
 
     static final DateTimeFormatter pattern = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");

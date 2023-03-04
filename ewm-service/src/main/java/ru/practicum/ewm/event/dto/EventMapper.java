@@ -1,5 +1,7 @@
 package ru.practicum.ewm.event.dto;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import ru.practicum.ewm.event.model.Event;
 import ru.practicum.ewm.event.model.State;
 import ru.practicum.ewm.request.model.Request;
@@ -13,6 +15,7 @@ import static ru.practicum.ewm.category.dto.CategoryMapper.toCategoryDto;
 import static ru.practicum.ewm.request.dto.RequestMapper.mapToRequestDto;
 import static ru.practicum.ewm.user.dto.UserMapper.toUserShotDto;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class EventMapper {
 
     static final DateTimeFormatter pattern = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -26,7 +29,7 @@ public class EventMapper {
                 .eventDate(LocalDateTime.parse(event.getEventDate(), pattern))
                 .paid(event.getPaid())
                 .participantLimit(event.getParticipantLimit())
-                .requestModeration(event.getRequestModeration() != null ? event.getRequestModeration() : true)
+                .requestModeration(!event.getRequestModeration() ? false : true)
                 .state(State.PENDING)
                 .title(event.getTitle())
                 .views(0L)
